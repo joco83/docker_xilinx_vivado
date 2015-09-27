@@ -258,7 +258,7 @@ function run_dockapp
     echo -e "${VERT}*${NORMAL} Démarrage d'une nouvelle instance de l'image Docker..."
     echo -e ""
 
-    echo "docker run --name xilinx_vivado --rm -i -t $DEVLST -e DISPLAY=$DISPLAY $FOLDLST $DOCKIMG $CMD"
+    eval "docker run --name xilinx_vivado --rm -i -t $DEVLST -e DISPLAY=$DISPLAY $FOLDLST $DOCKIMG $CMD"
 
     echo -e "${VERT}*${NORMAL} Fermeture et suppression de l'instance de l'image Docker."
 
