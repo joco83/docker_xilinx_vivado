@@ -15,7 +15,7 @@ Bien entendu, l'installation de l'environnement de développement Vivado de Xili
 
 Le script dockapp.sh permet de simplifier le lancement d'une instance de l'image Docker précédemment décrite.
 Le second script script.sh contient différentes configuration pour appeler la fonction run_dockapp contenu dans le script dockapp.sh.
-Il faut dans un premier temps sourcer les deux fichier script dans le fichier ~/.bashrc.
+Il faut dans un premier temps sourcer les deux fichiers scripts dans le fichier ~/.bashrc.
 
 Ensuite l'appel des fonctions s'effectue comme suit :
 
