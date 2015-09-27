@@ -48,7 +48,7 @@ function print_help
 function print_version
 {
     echo -e "Version :"
-    echo -e "(run.sh 0.1)"
+    echo -e "(run_dockapp 0.1)"
 }
 
 function run_dockapp
@@ -72,7 +72,7 @@ function run_dockapp
     # -h <Aide>
     #
 
-    local OPTLST=":d:p:i:c:f:hv:"
+    local OPTLST=":d:p:i:c:f:hv"
     
     local opt_dev=0
     local opt_periph=0
@@ -109,10 +109,19 @@ function run_dockapp
             f ) opt_fold=1
                 FOLDLST=$OPTARG ;;
             h ) print_help
+                unset OPTIND
+                unset OPTARG
+                unset OPTERR
                 return 0 ;;
             v ) print_version
+                unset OPTIND
+                unset OPTARG
+                unset OPTERR
                 return 0 ;;
             ? ) echo -e "${ROUGE}*${NORMAL} option illégale -$OPTARG" >&2
+                unset OPTIND
+                unset OPTARG
+                unset OPTERR
                 return 1 ;;
         esac
     done
