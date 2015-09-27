@@ -226,8 +226,6 @@ function run_dockapp
         echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB1${NORMAL}"
     fi
 
-    echo $DEVLST
-
     #
     # On génère la liste des dossiers à mapper entre l'environnement hôte
     # et l'environnement du conteneur.
