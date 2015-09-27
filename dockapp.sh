@@ -192,27 +192,7 @@ function run_dockapp
 
     if [[ $opt_perif -ne 0 ]] ; then
         local TMP=$DEVLST
-        
-        BUS_DEV=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $2 " " $4}' | awk 'BEGIN{FS=":"} {print $1}')
-
-        BUS=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $1}')
-        DEV=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $2}')
-
-        echo -e "${VERT}*${NORMAL} Numéro de bus du périphérique usb ${ROUGE}$USB_BOARD${NORMAL} : ${VERT}${BUS}${NORMAL}"
-        echo -e "${VERT}*${NORMAL} Numéro du périphérique usb ${ROUGE}$USB_BOARD${NORMAL} : ${VERT}${DEV}${NORMAL}"
-
-        DEVLST="--device=/dev/bus/usb/$BUS/$DEV:/dev/bus/usb/$BUS/$DEV "
-        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/bus/usb/$BUS/$DEV${NORMAL}"
-
-        if [[ -c /dev/ttyUSB0 ]] ; then
-            DEVLST="$DEVLST --device=/dev/ttyUSB0:/dev/ttyUSB0 "
-            echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB0${NORMAL}"
-        fi
-
-        if [[ -c /dev/ttyUSB1 ]] ; then
-            DEVLST="$DEVLST --device=/dev/ttyUSB1:/dev/ttyUSB1"
-            echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB1${NORMAL}"
-        fi
+        DEVLST=""
     
         TMP=$(echo $TMP | awk 'BEGIN{FS=":"} {NF=NF; print $0}')
 
@@ -225,6 +205,29 @@ function run_dockapp
         unset opt_perif
     fi
 
+    BUS_DEV=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $2 " " $4}' | awk 'BEGIN{FS=":"} {print $1}')
+
+    BUS=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $1}')
+    DEV=$(echo $BUS_DEV | awk 'BEGIN{FS=" "} {print $2}')
+
+    echo -e "${VERT}*${NORMAL} Numéro de bus du périphérique usb ${ROUGE}$USB_BOARD${NORMAL} : ${VERT}${BUS}${NORMAL}"
+    echo -e "${VERT}*${NORMAL} Numéro du périphérique usb ${ROUGE}$USB_BOARD${NORMAL} : ${VERT}${DEV}${NORMAL}"
+    
+    DEVLST="$DEVLST --device=/dev/bus/usb/$BUS/$DEV:/dev/bus/usb/$BUS/$DEV "
+    echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/bus/usb/$BUS/$DEV${NORMAL}"
+    
+    if [[ -c /dev/ttyUSB0 ]] ; then
+        DEVLST="$DEVLST --device=/dev/ttyUSB0:/dev/ttyUSB0 "
+        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB0${NORMAL}"
+    fi
+    
+    if [[ -c /dev/ttyUSB1 ]] ; then
+        DEVLST="$DEVLST --device=/dev/ttyUSB1:/dev/ttyUSB1"
+        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB1${NORMAL}"
+    fi
+
+    echo $DEVLST
+
     #
     # On génère la liste des dossiers à mapper entre l'environnement hôte
     # et l'environnement du conteneur.
@@ -232,9 +235,7 @@ function run_dockapp
 
     if [[ $opt_fold -ne 0 ]] ; then
         local TMP=$FOLDLST
-    
-        FOLDLST=$(echo "-v $X11FOLD:$X11FOLD")
-        echo -e "${VERT}*${NORMAL} Mappage du dossier ${VERT}${X11FOLD}${NORMAL}"
+        FOLDLST=""
 
         TMP=$(echo $TMP | awk 'BEGIN{FS=":"} {NF=NF; print $0}')
 
@@ -247,6 +248,9 @@ function run_dockapp
         unset opt_fold
     fi
 
+    FOLDLST=$(echo "$FOLDLST -v $X11FOLD:$X11FOLD")
+    echo -e "${VERT}*${NORMAL} Mappage du dossier ${VERT}${X11FOLD}${NORMAL}"
+
     #
     # On exécute la commande dans le conteneur Docker.
     #
@@ -254,7 +258,7 @@ function run_dockapp
     echo -e "${VERT}*${NORMAL} Démarrage d'une nouvelle instance de l'image Docker..."
     echo -e ""
 
-    eval "docker run --name xilinx_vivado --rm -i -t $DEVLST -e DISPLAY=$DISPLAY $FOLDLST $DOCKIMG $CMD"
+    echo "docker run --name xilinx_vivado --rm -i -t $DEVLST -e DISPLAY=$DISPLAY $FOLDLST $DOCKIMG $CMD"
 
     echo -e "${VERT}*${NORMAL} Fermeture et suppression de l'instance de l'image Docker."
 
