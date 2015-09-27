@@ -21,7 +21,7 @@ CYAN="\\033[1;36m"
 
 function print_help
 {
-    echo -e "Commande : ${JAUNE}run.sh${NORMAL} ${VERT}<liste des paramètres> <...>${NORMAL}"
+    echo -e "Commande : ${JAUNE}run_dockapp${NORMAL} ${VERT}<liste des paramètres> <...>${NORMAL}"
     echo -e ""
     echo -e "Liste des paramètres :"
     echo -e ""
