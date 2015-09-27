@@ -9,6 +9,8 @@ Le fichier Dockerfile contenu dans ce dépôt permet de générer une image cont
 docker build -t joco/ubuntu-for-xilinx-vivado .
 ```
 
+Bien entendu, l'installation de l'environnement de développement Vivado de Xilinx, ainsi que l'obtention d'une licence (WebPak est gratuite) est laissé au soin de l'utilisateur.
+
 ## Les scripts bash
 
 Le script dockapp.sh permet de simplifier le lancement d'une instance de l'image Docker précédemment décrite.
@@ -61,3 +63,5 @@ Liste des paramètres :
  -v
     Affichage de la version du script.
 ```
+
+Bien évidemment, le script peut être modifier selon les besoins de l'utilisateur.
