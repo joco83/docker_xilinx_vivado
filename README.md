@@ -63,3 +63,5 @@ Liste des paramètres :
  -v
     Affichage de la version du script.
 ```
+
+Bien évidemment, le script peut être modifier selon les besoins de l'utilisateur.
