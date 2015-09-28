@@ -5,6 +5,8 @@
 #
 # Date : 27 septembre 2015
 #
+# Version : 0.1
+#
 
 # Script pour exécuter l'environnement de développement Vivado de la
 # société Xilinx dans un conteneur.
@@ -118,7 +120,7 @@ function run_dockapp
                 unset OPTARG
                 unset OPTERR
                 return 0 ;;
-            ? ) echo -e "${ROUGE}*${NORMAL} option illégale -$OPTARG" >&2
+            ? ) echo -e "${ROUGE}*${NORMAL} Option illégale -$OPTARG" >&2
                 unset OPTIND
                 unset OPTARG
                 unset OPTERR
@@ -128,6 +130,30 @@ function run_dockapp
 
     shift $(($OPTIND - 1))
     unset opt
+
+    #
+    # On vérifie si il y a des arguments restants non valides.
+    #
+    
+    if [[ $# -ne 0 ]] ; then
+        if [[ $# -eq 1 ]] ; then
+            echo -e -n "${ROUGE}*${NORMAL} Option illégale " >&2
+        else
+            echo -e -n "${ROUGE}*${NORMAL} Options illégales " >&2
+        fi
+        
+        while [[ $# -ne 0 ]] ; do
+            echo -n "$1 "
+            shift
+        done
+
+        echo ""
+
+        unset OPTIND
+        unset OPTARG
+        unset OPTERR
+        return 1
+    fi
 
     #
     # On vérifie qu'un périphérique a été mentionné en arguement et
@@ -224,17 +250,20 @@ function run_dockapp
     
     DEVLST="$DEVLST --device=/dev/bus/usb/$BUS/$DEV:/dev/bus/usb/$BUS/$DEV "
     echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/bus/usb/$BUS/$DEV${NORMAL}"
-    
-    if [[ -c /dev/ttyUSB0 ]] ; then
-        DEVLST="$DEVLST --device=/dev/ttyUSB0:/dev/ttyUSB0 "
-        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB0${NORMAL}"
-    fi
-    
-    if [[ -c /dev/ttyUSB1 ]] ; then
-        DEVLST="$DEVLST --device=/dev/ttyUSB1:/dev/ttyUSB1"
-        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}/dev/ttyUSB1${NORMAL}"
-    fi
 
+    #
+    # Mappage automatique des périphériques de type série via USB (/dev/ttyUSB*).
+    #
+    
+    local DEVTTY=$(ls /dev/ttyUSB*)
+
+    for i in $DEVTTY ; do
+        DEVLST="$DEVLST --device=$i:$i "
+        echo -e "${VERT}*${NORMAL} Mappage du périphérique ${VERT}${i}${NORMAL}"
+    done
+
+    unset DEVTTY
+    
     #
     # On génère la liste des dossiers à mapper entre l'environnement hôte
     # et l'environnement du conteneur.
