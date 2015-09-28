@@ -15,6 +15,13 @@ Bien entendu, l'installation de l'environnement de développement Vivado de Xili
 
 Le script dockapp.sh permet de simplifier le lancement d'une instance de l'image Docker précédemment décrite.
 Le second script script.sh contient différentes configuration pour appeler la fonction run_dockapp contenu dans le script dockapp.sh.
+
+Ceci afin d'éviter à l'utilisateur de devoir saisir une commande comme la suivante et sachant qu'il faut la modifier à chaque fois que l'on débranche et rebranche la carte de développement.
+
+```bash
+docker run --name xilinx_vivado --rm -i -t  --device=/dev/bus/usb/002/008:/dev/bus/usb/002/008  --device=/dev/ttyUSB0:/dev/ttyUSB0  --device=/dev/ttyUSB1:/dev/ttyUSB1  -e DISPLAY=:0  -v /home/joco/docker_share:/home/joco/docker_share -v /home/joco/Documents/ITI4/VHDL_FPGA:/home/joco/Documents/ITI4/VHDL_FPGA -v /tmp/.X11-unix:/tmp/.X11-unix joco/xilinx-vivado /opt/Xilinx/Vivado/2015.2/bin/vivado
+```
+
 Il faut dans un premier temps sourcer les deux fichiers scripts dans le fichier ~/.bashrc.
 
 Ensuite l'appel des fonctions s'effectue comme suit :
